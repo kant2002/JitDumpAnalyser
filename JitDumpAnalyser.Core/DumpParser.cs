@@ -73,14 +73,16 @@ public class DumpParser
             {
                 if (preInit.StartsWith("\r\nTrees after") && lastPhase is not null)
                 {
-                    if (!preInit.StartsWith("\r\nTrees before"))
+                    var treesBeforeIndex = preInit.IndexOf("Trees before");
+                    if (treesBeforeIndex == -1)
                     {
                         lastPhase.PostInfo = preInit;
                         preInit = null;
                     }
                     else
                     {
-                        Debugger.Break();
+                        lastPhase.PostInfo = preInit[0..treesBeforeIndex];
+                        preInit = preInit[treesBeforeIndex..];
                     }
                 }
             }
