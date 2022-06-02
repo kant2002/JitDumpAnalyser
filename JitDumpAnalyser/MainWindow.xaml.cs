@@ -31,7 +31,7 @@ namespace JitDumpAnalyser
             this.InitializeComponent();
         }
 
-        private async void myButton_Click(object sender, RoutedEventArgs e)
+        private async void loadJitDump_Click(object sender, RoutedEventArgs e)
         {
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
             var picker = new FileOpenPicker
@@ -53,6 +53,7 @@ namespace JitDumpAnalyser
             var content = await File.ReadAllTextAsync(file.Path);
             var parser = new DumpParser();
             var dumpResult = parser.Parse(content);
+            this.tabsMethods.DataContext = dumpResult.ParsedMethods;
         }
     }
 }
