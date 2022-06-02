@@ -2,15 +2,17 @@
 
 public class MethodCompilationResult
 {
-    public MethodCompilationResult(string methodName)
+    public MethodCompilationResult(string methodName, string content)
     {
         MethodName = methodName;
+        Content = content;
     }
 
-    public string MethodName { get; internal init; }
+    public string MethodName { get; }
 
-    public string Content { get; internal init; }
+    public string Content { get; }
 
     public uint MethodHash { get; set; }
+
     public List<PhaseInformation> Phases { get; } = new();
 }

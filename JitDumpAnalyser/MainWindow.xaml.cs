@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using JitDumpAnalyser.ViewModels;
+using Microsoft.UI.Xaml;
 
 namespace JitDumpAnalyser;
 

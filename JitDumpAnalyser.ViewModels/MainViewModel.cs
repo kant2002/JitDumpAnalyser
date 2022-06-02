@@ -1,13 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using JitDumpAnalyser.Core;
 
-namespace JitDumpAnalyser;
+namespace JitDumpAnalyser.ViewModels;
 
-internal class MainViewModel: INotifyPropertyChanged
+public class MainViewModel: INotifyPropertyChanged
 {
     private IFileSelector fileSelector;
 
@@ -22,9 +21,9 @@ internal class MainViewModel: INotifyPropertyChanged
 
     public ObservableCollection<MethodCompilationModel> ParsedMethods { get; } = new();
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-    private async void LoadTarget(object parameter)
+    private async void LoadTarget(object? parameter)
     {
         var file = await fileSelector.SelectFileAsync();
         if (file == null)
@@ -43,7 +42,7 @@ internal class MainViewModel: INotifyPropertyChanged
         }
     }
 
-    private void NotifyPropertyChanged([CallerMemberName]string propertyName = null)
+    private void NotifyPropertyChanged([CallerMemberName]string? propertyName = null)
     {
         this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

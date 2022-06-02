@@ -1,7 +1,6 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
-namespace JitDumpAnalyser;
+namespace JitDumpAnalyser.ViewModels;
 
 /// <summary>
 /// A command whose sole purpose is to relay its functionality 
@@ -12,19 +11,19 @@ namespace JitDumpAnalyser;
 /// </summary>
 public class RelayCommand : ICommand
 {
-    private readonly Action<object> _execute;
-    private readonly Func<object, bool> _canExecute;
+    private readonly Action<object?> _execute;
+    private readonly Func<object?, bool>? _canExecute;
 
     /// <summary>
     /// Raised when RaiseCanExecuteChanged is called.
     /// </summary>
-    public event EventHandler CanExecuteChanged;
+    public event EventHandler? CanExecuteChanged;
 
     /// <summary>
     /// Creates a new command that can always execute.
     /// </summary>
     /// <param name="execute">The execution logic.</param>
-    public RelayCommand(Action<object> execute)
+    public RelayCommand(Action<object?> execute)
         : this(execute, null)
     {
     }
@@ -34,11 +33,9 @@ public class RelayCommand : ICommand
     /// </summary>
     /// <param name="execute">The execution logic.</param>
     /// <param name="canExecute">The execution status logic.</param>
-    public RelayCommand(Action<object> execute, Func<object, bool> canExecute)
+    public RelayCommand(Action<object?> execute, Func<object?, bool>? canExecute)
     {
-        if (execute == null)
-            throw new ArgumentNullException("execute");
-        _execute = execute;
+        _execute = execute ?? throw new ArgumentNullException(nameof(execute));
         _canExecute = canExecute;
     }
 
@@ -50,7 +47,7 @@ public class RelayCommand : ICommand
     /// data to be passed, this object can be set to null.
     /// </param>
     /// <returns>true if this command can be executed; otherwise, false.</returns>
-    public bool CanExecute(object parameter)
+    public bool CanExecute(object? parameter)
     {
         return _canExecute == null ? true : _canExecute(parameter);
     }
@@ -62,7 +59,7 @@ public class RelayCommand : ICommand
     /// Data used by the command. If the command does not require 
     /// data to be passed, this object can be set to null.
     /// </param>
-    public void Execute(object parameter)
+    public void Execute(object? parameter)
     {
         _execute(parameter);
     }
@@ -74,10 +71,6 @@ public class RelayCommand : ICommand
     /// </summary>
     public void RaiseCanExecuteChanged()
     {
-        var handler = CanExecuteChanged;
-        if (handler != null)
-        {
-            handler(this, EventArgs.Empty);
-        }
+        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 }

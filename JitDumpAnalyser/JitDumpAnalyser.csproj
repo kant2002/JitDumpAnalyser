@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JitDumpAnalyser.Core\JitDumpAnalyser.Core.csproj" />
+    <ProjectReference Include="..\JitDumpAnalyser.ViewModels\JitDumpAnalyser.ViewModels.csproj" />
   </ItemGroup>
 
   <!-- 

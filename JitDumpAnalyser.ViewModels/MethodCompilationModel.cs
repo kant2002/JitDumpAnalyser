@@ -1,14 +1,13 @@
 ﻿using JitDumpAnalyser.Core;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace JitDumpAnalyser;
+namespace JitDumpAnalyser.ViewModels;
 
-internal class MethodCompilationModel : INotifyPropertyChanged
+public class MethodCompilationModel : INotifyPropertyChanged
 {
     private readonly MethodCompilationResult method;
-    private PhaseInformation selectedPhase;
+    private PhaseInformation? selectedPhase;
 
     public MethodCompilationModel(MethodCompilationResult method)
     {
@@ -20,9 +19,10 @@ internal class MethodCompilationModel : INotifyPropertyChanged
     public string Content => method.Content;
 
     public uint MethodHash => method.MethodHash;
+
     public List<PhaseInformation> Phases => method.Phases;
 
-    public PhaseInformation SelectedPhase
+    public PhaseInformation? SelectedPhase
     {
         get => selectedPhase;
         set
@@ -32,9 +32,9 @@ internal class MethodCompilationModel : INotifyPropertyChanged
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-    private void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
+    private void NotifyPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
