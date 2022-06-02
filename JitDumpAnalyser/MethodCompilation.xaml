@@ -19,21 +19,23 @@
             <TextBlock Text=" Hash: " />
             <TextBlock Text="{Binding MethodHash}" />
         </StackPanel>
-        <ScrollViewer Grid.Row="1">
-            <!--<TextBlock Text="{x:Bind Content}" />-->
-            <NavigationView MenuItemsSource="{Binding Phases}" PaneDisplayMode="Left"
-                                                SelectedItem="{Binding SelectedPhase, Mode=TwoWay}"
-                                                IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False"
-                                                IsSettingsVisible="False" x:Name="view">
-                <NavigationView.MenuItemTemplate>
-                    <DataTemplate x:DataType="core:PhaseInformation">
-                        <NavigationViewItem Content="{Binding Name}" />
-                    </DataTemplate>
-                </NavigationView.MenuItemTemplate>
-                <ScrollViewer>
-                    <TextBlock Text="{Binding Path=SelectedPhase.Content}" />
-                </ScrollViewer>
-            </NavigationView>
-        </ScrollViewer>
+        <!--<TextBlock Text="{x:Bind Content}" />-->
+        <NavigationView Grid.Row="1" MenuItemsSource="{Binding Phases}" PaneDisplayMode="Left"
+                                            SelectedItem="{Binding SelectedPhase, Mode=TwoWay}"
+                                            IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False"
+                                            IsSettingsVisible="False" x:Name="view">
+            <NavigationView.MenuItemTemplate>
+                <DataTemplate x:DataType="core:PhaseInformation">
+                    <NavigationViewItem Content="{Binding Name}" />
+                </DataTemplate>
+            </NavigationView.MenuItemTemplate>
+            <ScrollViewer>
+                <TextBlock Text="{Binding Path=SelectedPhase.Content}" FontFamily="Consolas">
+                    <TextBlock.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="C" Modifiers="Control" Invoked="KeyboardAccelerator_Invoked"/>
+                    </TextBlock.KeyboardAccelerators>
+                </TextBlock>
+            </ScrollViewer>
+        </NavigationView>
     </Grid>
 </UserControl>
