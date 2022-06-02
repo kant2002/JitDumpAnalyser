@@ -18,5 +18,6 @@ namespace JitDumpAnalyser.Core
         public string Content { get; internal init; }
 
         public uint MethodHash { get; set; }
+        public List<PhaseInformation> Phases { get; } = new();
     }
 }
