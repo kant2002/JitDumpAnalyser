@@ -82,4 +82,19 @@ BBOPT not set
 *************** Finishing PHASE Pre-import", preImportPhase.Content);
         Assert.False(preImportPhase.NoChanges);
     }
+
+    [Fact]
+    public void FindUnfinishedMethod()
+    {
+        var content = File.ReadAllText("jitdump.txt");
+
+        var parser = new DumpParser();
+        var parseResult = parser.Parse(content);
+
+        Assert.Single(parseResult.ParsedMethods);
+        var methodResult = parseResult.ParsedMethods[0];
+        Assert.Equal(58, methodResult.Phases.Count);
+        Assert.Equal("System.Reflection.Emit.DynamicResolver:Finalize():this", methodResult.MethodName);
+        Assert.Equal(0x00d7d3b2u, methodResult.MethodHash);
+    }
 }

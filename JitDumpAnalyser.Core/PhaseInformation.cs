@@ -1,5 +1,8 @@
-﻿namespace JitDumpAnalyser.Core;
+﻿using System.Diagnostics;
 
+namespace JitDumpAnalyser.Core;
+
+[DebuggerDisplay("Phase = {Name}")]
 public class PhaseInformation
 {
     public PhaseInformation(string name, string content)

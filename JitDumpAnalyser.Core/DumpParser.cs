@@ -23,14 +23,24 @@ public class DumpParser
             var methodName = content[(startIndex + StartCompilingMarker.Length)..spaceMarker];
             var hashEndIndex = content.IndexOf(")", spaceMarker + MethodHashMarker.Length);
             var methodHash = uint.Parse(content.Substring(spaceMarker + MethodHashMarker.Length, hashEndIndex - spaceMarker - MethodHashMarker.Length), System.Globalization.NumberStyles.HexNumber);
-            string methodContent = content.Substring(startIndex, endIndex - startIndex + methodName.Length + EndCompilingMarker.Length);
+            string methodContent;
+            if (endIndex != -1)
+            {
+                seekIndex = endIndex + EndCompilingMarker.Length + methodName.Length;
+                methodContent = content.Substring(startIndex, endIndex - startIndex + methodName.Length + EndCompilingMarker.Length);
+            }
+            else
+            {
+                seekIndex = content.Length;
+                methodContent = content.Substring(startIndex);
+            }
+
             var methodCompilationResult = new MethodCompilationResult(methodName, methodContent)
             {
                 MethodHash = methodHash,
             };
             ParsePhases(methodContent, methodCompilationResult.Phases);
             result.ParsedMethods.Add(methodCompilationResult);
-            seekIndex = endIndex + EndCompilingMarker.Length + methodName.Length ;
         }
 
         return result;
@@ -54,18 +64,26 @@ public class DumpParser
             var endIndex = content.IndexOf(EndMarker, startIndex + StartMarker.Length);
             var spaceMarker = content.IndexOf("\r\n", startIndex + StartMarker.Length);
             var phaseName = content[(startIndex + StartMarker.Length)..spaceMarker];
-            seekIndex = endIndex + EndMarker.Length + phaseName.Length;
             string phaseContent;
             bool noChanges = false;
-            if (content.IndexOf(NoChangesMarker, endIndex) == seekIndex)
+            if (endIndex == -1)
             {
-                noChanges = true;
-                seekIndex += NoChangesMarker.Length;
-                phaseContent = content[startIndex..seekIndex];
+                phaseContent = content[startIndex..];
+                seekIndex = content.Length;
             }
             else
             {
-                phaseContent = content[startIndex..(endIndex + phaseName.Length + EndMarker.Length)];
+                seekIndex = endIndex + EndMarker.Length + phaseName.Length;
+                if (content.IndexOf(NoChangesMarker, endIndex) == seekIndex)
+                {
+                    noChanges = true;
+                    seekIndex += NoChangesMarker.Length;
+                    phaseContent = content[startIndex..seekIndex];
+                }
+                else
+                {
+                    phaseContent = content[startIndex..(endIndex + phaseName.Length + EndMarker.Length)];
+                }
             }
 
             var phaseInformation = new PhaseInformation(phaseName, phaseContent)
