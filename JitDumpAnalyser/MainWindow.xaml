@@ -45,7 +45,7 @@
                                         </DataTemplate>
                                     </NavigationView.MenuItemTemplate>
                                     <ScrollViewer>
-                                        <TextBlock Text="{x:Bind Path=SelectedPhase.Content}" />
+                                        <TextBlock Text="{Binding Path=SelectedPhase.Content}" />
                                     </ScrollViewer>
                                 </NavigationView>
                             </ScrollViewer>

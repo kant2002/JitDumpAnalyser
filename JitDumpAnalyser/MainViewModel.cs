@@ -1,26 +1,19 @@
-﻿using JitDumpAnalyser.Core;
-using Microsoft.UI.Xaml.Controls;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.Storage.Pickers;
+using JitDumpAnalyser.Core;
 
 namespace JitDumpAnalyser;
 
 internal class MainViewModel: INotifyPropertyChanged
 {
-    private IntPtr hwnd;
+    private IFileSelector fileSelector;
 
-    public MainViewModel(IntPtr windowHandle)
+    public MainViewModel(IFileSelector fileSelector)
     {
-        this.hwnd = windowHandle;
+        this.fileSelector = fileSelector;
     }
 
     public ICommand LoadDump => new RelayCommand(LoadTarget);
@@ -32,24 +25,14 @@ internal class MainViewModel: INotifyPropertyChanged
     public event PropertyChangedEventHandler PropertyChanged;
 
     private async void LoadTarget(object parameter)
-    {           
-        var picker = new FileOpenPicker
-        {
-            ViewMode = PickerViewMode.List,
-        };
-
-        picker.FileTypeFilter.Add(".txt");
-        picker.FileTypeFilter.Add(".log");
-        picker.FileTypeFilter.Add("*");
-        WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
-
-        var file = await picker.PickSingleFileAsync();
+    {
+        var file = await fileSelector.SelectFileAsync();
         if (file == null)
         {
             return;
         }
 
-        var content = await File.ReadAllTextAsync(file.Path);
+        var content = await File.ReadAllTextAsync(file);
         var parser = new DumpParser();
         var dumpResult = parser.Parse(content);
         this.ParserResult = dumpResult;
@@ -58,9 +41,6 @@ internal class MainViewModel: INotifyPropertyChanged
         {
             ParsedMethods.Add(new MethodCompilationModel(item));
         }
-
-        //this.NotifyPropertyChanged(nameof(ParserResult));
-        //this.NotifyPropertyChanged(nameof(ParsedMethods));
     }
 
     private void NotifyPropertyChanged([CallerMemberName]string propertyName = null)
