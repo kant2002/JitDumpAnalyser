@@ -56,19 +56,27 @@
                 var endIndex = content.IndexOf(EndMarker, startIndex + StartMarker.Length);
                 var spaceMarker = content.IndexOf("\r\n", startIndex + StartMarker.Length);
                 var phaseName = content.Substring(startIndex + StartMarker.Length, spaceMarker - (startIndex + StartMarker.Length));
-                string phaseContent = content.Substring(startIndex, endIndex - startIndex + phaseName.Length + EndMarker.Length);
+                seekIndex = endIndex + EndMarker.Length + phaseName.Length;
+                string phaseContent;
+                bool noChanges = false;
+                if (content.IndexOf(NoChangesMarker, endIndex) == seekIndex)
+                {
+                    noChanges = true;
+                    seekIndex += NoChangesMarker.Length;
+                    phaseContent = content.Substring(startIndex, seekIndex - startIndex);
+                }
+                else
+                {
+                    phaseContent = content.Substring(startIndex, endIndex - startIndex + phaseName.Length + EndMarker.Length);
+                }
+
                 var phaseInformation = new PhaseInformation(phaseName)
                 {
                     Content = phaseContent,
+                    NoChanges = noChanges,
                 };
-                phases.Add(phaseInformation);
 
-                seekIndex = endIndex + EndMarker.Length + phaseName.Length;
-                if (content.IndexOf(NoChangesMarker, endIndex) == seekIndex)
-                {
-                    phaseInformation.NoChanges = true;
-                    seekIndex += NoChangesMarker.Length;
-                }
+                phases.Add(phaseInformation);
             }
         }
     }

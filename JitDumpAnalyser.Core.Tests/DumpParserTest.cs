@@ -73,7 +73,7 @@ namespace JitDumpAnalyser.Core.Tests
             Assert.Equal(@"*************** Starting PHASE Profile incorporation
 BBOPT not set
 
-*************** Finishing PHASE Profile incorporation", profileIncorporationPhase.Content);
+*************** Finishing PHASE Profile incorporation [no changes]", profileIncorporationPhase.Content);
             Assert.True(profileIncorporationPhase.NoChanges);
 
             var preImportPhase = methodResult.Phases.First(phase => phase.Name == "Pre-import");

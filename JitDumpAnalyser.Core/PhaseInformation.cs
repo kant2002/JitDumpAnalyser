@@ -13,6 +13,6 @@
 
         public string? PreInfo { get; internal set; }
         public string? PostInfo { get; internal set; }
-        public bool NoChanges { get; set; }
+        public bool NoChanges { get; init; }
     }
 }

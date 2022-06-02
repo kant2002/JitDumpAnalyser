@@ -8,15 +8,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
+    <Grid x:Name="parent" d:DataContext="{d:DesignInstance Type=local:MainViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Click="loadJitDump_Click">Load Jit dump</Button>
-        <TabView x:Name="tabsMethods" Grid.Row="1" SelectedIndex="0" Margin="12" MinHeight="475" TabItemsSource="{Binding}">
+        <Button Command="{Binding LoadDump}">Load Jit dump</Button>
+        <TabView Grid.Row="1" SelectedIndex="0" Margin="12" MinHeight="475" TabItemsSource="{Binding Path=ParsedMethods}"
+                 IsAddTabButtonVisible="False">
             <TabView.TabItemTemplate>
-                <DataTemplate x:DataType="core:MethodCompilationResult">
+                <DataTemplate x:DataType="local:MethodCompilationModel">
                     <TabViewItem Header="{x:Bind MethodName}">
                         <TabViewItem.IconSource>
                             <SymbolIconSource Symbol="Placeholder" />
@@ -34,7 +35,8 @@
                             </StackPanel>
                             <ScrollViewer Grid.Row="1">
                                 <!--<TextBlock Text="{x:Bind Content}" />-->
-                                <NavigationView MenuItemsSource="{Binding Phases}" PaneDisplayMode="Left" 
+                                <NavigationView MenuItemsSource="{Binding Phases}" PaneDisplayMode="Left"
+                                                SelectedItem="{Binding SelectedPhase, Mode=TwoWay}"
                                                 IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False"
                                                 IsSettingsVisible="False" x:Name="view">
                                     <NavigationView.MenuItemTemplate>
@@ -43,7 +45,7 @@
                                         </DataTemplate>
                                     </NavigationView.MenuItemTemplate>
                                     <ScrollViewer>
-                                        <TextBlock Text="{x:Bind Content}" DataContext="{Binding ElementName=view, Path=SelectedItem}" />
+                                        <TextBlock Text="{x:Bind Path=SelectedPhase.Content}" />
                                     </ScrollViewer>
                                 </NavigationView>
                             </ScrollViewer>

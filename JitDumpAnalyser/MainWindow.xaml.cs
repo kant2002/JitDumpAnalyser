@@ -29,31 +29,8 @@ namespace JitDumpAnalyser
         public MainWindow()
         {
             this.InitializeComponent();
-        }
-
-        private async void loadJitDump_Click(object sender, RoutedEventArgs e)
-        {
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
-            var picker = new FileOpenPicker
-            {
-                ViewMode = PickerViewMode.List,
-            };
-
-            picker.FileTypeFilter.Add(".txt");
-            picker.FileTypeFilter.Add(".log");
-            picker.FileTypeFilter.Add("*");
-            WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
-
-            var file = await picker.PickSingleFileAsync();
-            if (file == null)
-            {
-                return;
-            }
-
-            var content = await File.ReadAllTextAsync(file.Path);
-            var parser = new DumpParser();
-            var dumpResult = parser.Parse(content);
-            this.tabsMethods.DataContext = dumpResult.ParsedMethods;
+            parent.DataContext = new MainViewModel(hwnd);
         }
     }
 }
