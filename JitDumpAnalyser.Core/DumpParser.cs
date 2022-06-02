@@ -1,4 +1,6 @@
-﻿namespace JitDumpAnalyser.Core;
+﻿using System.Diagnostics;
+
+namespace JitDumpAnalyser.Core;
 
 public class DumpParser
 {
@@ -53,12 +55,34 @@ public class DumpParser
         const string NoChangesMarker = " [no changes]";
 
         var seekIndex = 0;
+        PhaseInformation? lastPhase = null;
         while (seekIndex < content.Length)
         {
             var startIndex = content.IndexOf(StartMarker, seekIndex);
             if (startIndex < 0)
             {
                 return;
+            }
+
+            var preInit = content[seekIndex..startIndex];
+            if (preInit.Length <= 4)
+            {
+                preInit = null;
+            }
+            else
+            {
+                if (preInit.StartsWith("\r\nTrees after") && lastPhase is not null)
+                {
+                    if (!preInit.StartsWith("\r\nTrees before"))
+                    {
+                        lastPhase.PostInfo = preInit;
+                        preInit = null;
+                    }
+                    else
+                    {
+                        Debugger.Break();
+                    }
+                }
             }
 
             var endIndex = content.IndexOf(EndMarker, startIndex + StartMarker.Length);
@@ -89,9 +113,11 @@ public class DumpParser
             var phaseInformation = new PhaseInformation(phaseName, phaseContent)
             {
                 NoChanges = noChanges,
+                PreInfo = preInit,
             };
 
             phases.Add(phaseInformation);
+            lastPhase = phaseInformation;
         }
     }
 }

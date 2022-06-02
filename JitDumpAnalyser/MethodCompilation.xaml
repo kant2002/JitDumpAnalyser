@@ -30,11 +30,26 @@
                 </DataTemplate>
             </NavigationView.MenuItemTemplate>
             <ScrollViewer>
-                <TextBlock Text="{Binding Path=SelectedPhase.Content}" FontFamily="Consolas">
-                    <TextBlock.KeyboardAccelerators>
-                        <KeyboardAccelerator Key="C" Modifiers="Control" Invoked="KeyboardAccelerator_Invoked"/>
-                    </TextBlock.KeyboardAccelerators>
-                </TextBlock>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Pre info" FontWeight="Bold" />
+                    <TextBlock Text="{Binding Path=SelectedPhase.PreInfo}" FontFamily="Consolas">
+                        <TextBlock.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="C" Modifiers="Control" Invoked="KeyboardAccelerator_Invoked"/>
+                        </TextBlock.KeyboardAccelerators>
+                    </TextBlock>
+                    <TextBlock Text="Content" FontWeight="Bold" />
+                    <TextBlock Text="{Binding Path=SelectedPhase.Content}" FontFamily="Consolas">
+                        <TextBlock.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="C" Modifiers="Control" Invoked="KeyboardAccelerator_Invoked"/>
+                        </TextBlock.KeyboardAccelerators>
+                    </TextBlock>
+                    <TextBlock Text="Post info" FontWeight="Bold" />
+                    <TextBlock Text="{Binding Path=SelectedPhase.PostInfo}" FontFamily="Consolas">
+                        <TextBlock.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="C" Modifiers="Control" Invoked="KeyboardAccelerator_Invoked"/>
+                        </TextBlock.KeyboardAccelerators>
+                    </TextBlock>
+                </StackPanel>
             </ScrollViewer>
         </NavigationView>
     </Grid>

@@ -11,7 +11,8 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         this.InitializeComponent();
-        parent.DataContext = new MainViewModel(new WinUIFileSelector(this));
+        MainViewModel mainViewModel = new MainViewModel(new WinUIFileSelector(this));
+        parent.DataContext = mainViewModel;
         this.Title = "JIT Dump Analyzer";
     }
 }

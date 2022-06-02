@@ -97,4 +97,18 @@ BBOPT not set
         Assert.Equal("System.Reflection.Emit.DynamicResolver:Finalize():this", methodResult.MethodName);
         Assert.Equal(0x00d7d3b2u, methodResult.MethodHash);
     }
+
+    [Fact]
+    public void ParsePrePhase()
+    {
+        var content = File.ReadAllText("Dump1.txt");
+
+        var parser = new DumpParser();
+        var parseResult = parser.Parse(content);
+
+        Assert.NotNull(parseResult.ParsedMethods.FirstOrDefault());
+        var methodResult = parseResult.ParsedMethods[0];
+        var phase = methodResult.Phases.First();
+        Assert.NotNull(phase.PreInfo);
+    }
 }
