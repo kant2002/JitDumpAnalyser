@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "JitDumpAnalyser (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "JitDumpAnalyser (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
