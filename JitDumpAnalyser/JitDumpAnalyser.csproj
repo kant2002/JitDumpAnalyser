@@ -28,6 +28,11 @@
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\JitDumpAnalyser.Core\JitDumpAnalyser.Core.csproj" />
+    <ProjectReference Include="..\JitDumpAnalyser.ViewModels\JitDumpAnalyser.ViewModels.csproj" />
+  </ItemGroup>
+
   <!-- 
     Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
     Tools extension to be activated for this project even if the Windows App SDK Nuget
@@ -35,10 +40,6 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\JitDumpAnalyser.Core\JitDumpAnalyser.Core.csproj" />
-    <ProjectReference Include="..\JitDumpAnalyser.ViewModels\JitDumpAnalyser.ViewModels.csproj" />
   </ItemGroup>
 
   <!-- 
