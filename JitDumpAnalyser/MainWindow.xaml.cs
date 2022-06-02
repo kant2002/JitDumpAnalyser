@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using JitDumpAnalyser.Core;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -49,10 +50,9 @@ namespace JitDumpAnalyser
                 return;
             }
 
-            //var content = await file.OpenReadAsync();
-            //var stream = content.AsStreamForRead();
             var content = await File.ReadAllTextAsync(file.Path);
-            content.IndexOf("****** START compiling", 0);
+            var parser = new DumpParser();
+            var dumpResult = parser.Parse(content);
         }
     }
 }
