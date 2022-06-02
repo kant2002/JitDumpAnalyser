@@ -33,7 +33,19 @@
                                 <TextBlock Text="{x:Bind MethodHash}" />
                             </StackPanel>
                             <ScrollViewer Grid.Row="1">
-                                <TextBlock Text="{x:Bind Content}" />
+                                <!--<TextBlock Text="{x:Bind Content}" />-->
+                                <NavigationView MenuItemsSource="{Binding Phases}" PaneDisplayMode="Left" 
+                                                IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False"
+                                                IsSettingsVisible="False" x:Name="view">
+                                    <NavigationView.MenuItemTemplate>
+                                        <DataTemplate x:DataType="core:PhaseInformation">
+                                            <NavigationViewItem Content="{Binding Name}" />
+                                        </DataTemplate>
+                                    </NavigationView.MenuItemTemplate>
+                                    <ScrollViewer>
+                                        <TextBlock Text="{x:Bind Content}" DataContext="{Binding ElementName=view, Path=SelectedItem}" />
+                                    </ScrollViewer>
+                                </NavigationView>
                             </ScrollViewer>
                         </Grid>
                     </TabViewItem>
