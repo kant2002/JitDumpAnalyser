@@ -61,6 +61,12 @@ public class DumpParser
             var startIndex = content.IndexOf(StartMarker, seekIndex);
             if (startIndex < 0)
             {
+                if (lastPhase != null)
+                {
+                    var postInit = content[seekIndex..];
+                    lastPhase.PostInfo = postInit;
+                }
+
                 return;
             }
 

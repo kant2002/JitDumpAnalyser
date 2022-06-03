@@ -111,4 +111,18 @@ BBOPT not set
         var phase = methodResult.Phases.First();
         Assert.NotNull(phase.PreInfo);
     }
+
+    [Fact]
+    public void ParsePostPhase()
+    {
+        var content = File.ReadAllText("Dump1.txt");
+
+        var parser = new DumpParser();
+        var parseResult = parser.Parse(content);
+
+        Assert.NotNull(parseResult.ParsedMethods.FirstOrDefault());
+        var methodResult = parseResult.ParsedMethods[0];
+        var phase = methodResult.Phases.Last();
+        Assert.NotNull(phase.PostInfo);
+    }
 }
