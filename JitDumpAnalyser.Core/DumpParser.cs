@@ -79,6 +79,18 @@ public class DumpParser
             var preInit = content[seekIndex..startIndex];
             if (preInit.Length <= 4)
             {
+                if (lastPhase is not null)
+                {
+                    if (lastPhase.PostInfo is not null)
+                    {
+                        lastPhase.PostInfo += preInit;
+                    }
+                    else
+                    {
+                        lastPhase.Content += preInit[..2];
+                    }
+                }
+
                 preInit = null;
             }
             else
@@ -88,7 +100,7 @@ public class DumpParser
                     var treesBeforeIndex = preInit.IndexOf("Trees before");
                     if (treesBeforeIndex == -1)
                     {
-                        lastPhase.PostInfo = preInit;
+                        lastPhase.PostInfo = preInit[..(preInit.Length - 2)];
                         preInit = null;
                     }
                     else

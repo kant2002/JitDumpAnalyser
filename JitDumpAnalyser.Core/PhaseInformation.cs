@@ -13,7 +13,7 @@ public class PhaseInformation
 
     public string Name { get; }
 
-    public string Content { get; }
+    public string Content { get; internal set; }
 
     public string? PreInfo { get; internal set; }
     public string? PostInfo { get; internal set; }
