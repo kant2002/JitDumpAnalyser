@@ -9,10 +9,27 @@
     mc:Ignorable="d">
 
     <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Horizontal" Height="50">
-            <TextBlock Text="Methods:"/>
-            <TextBlock Text="{Binding Path=MethodsDefinitions.Count}"/>
-            <TextBlock Text=" count"/>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Methods:"/>
+                <TextBlock Text="{Binding Path=MethodsDefinitions.Count}"/>
+                <TextBlock Text=" count"/>
+            </StackPanel>
+            <ItemsRepeater ItemsSource="{Binding MethodsDefinitions}" Width="Auto">
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <ListView ItemsSource="{Binding BasicBlocks}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" FontFamily="Consolas"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
         </StackPanel>
         <TextBlock Text="Pre info" FontWeight="Bold" />
         <TextBlock Text="{Binding Path=PreInfo}" FontFamily="Consolas">
