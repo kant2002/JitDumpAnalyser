@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:viewModels="using:JitDumpAnalyser.ViewModels"
     xmlns:core="using:JitDumpAnalyser.Core"
+    xmlns:local="using:JitDumpAnalyser"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:sys="using:System"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -31,31 +32,7 @@
                 </DataTemplate>
             </NavigationView.MenuItemTemplate>
             <ScrollViewer>
-                <StackPanel Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal" Height="50">
-                        <TextBlock Text="Methods:"/>
-                        <TextBlock Text="{Binding Path=SelectedPhase.MethodsDefinitions.Count}"/>
-                        <TextBlock Text=" count"/>
-                    </StackPanel>
-                    <TextBlock Text="Pre info" FontWeight="Bold" />
-                    <TextBlock Text="{Binding Path=SelectedPhase.PreInfo}" FontFamily="Consolas">
-                        <TextBlock.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="C" Modifiers="Control" Invoked="KeyboardAccelerator_Invoked"/>
-                        </TextBlock.KeyboardAccelerators>
-                    </TextBlock>
-                    <TextBlock Text="Content" FontWeight="Bold" />
-                    <TextBlock Text="{Binding Path=SelectedPhase.Content}" FontFamily="Consolas">
-                        <TextBlock.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="C" Modifiers="Control" Invoked="KeyboardAccelerator_Invoked"/>
-                        </TextBlock.KeyboardAccelerators>
-                    </TextBlock>
-                    <TextBlock Text="Post info" FontWeight="Bold" />
-                    <TextBlock Text="{Binding Path=SelectedPhase.PostInfo}" FontFamily="Consolas">
-                        <TextBlock.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="C" Modifiers="Control" Invoked="KeyboardAccelerator_Invoked"/>
-                        </TextBlock.KeyboardAccelerators>
-                    </TextBlock>
-                </StackPanel>
+                <local:PhaseInformation DataContext="{Binding SelectedPhase}" />
             </ScrollViewer>
         </NavigationView>
     </Grid>
