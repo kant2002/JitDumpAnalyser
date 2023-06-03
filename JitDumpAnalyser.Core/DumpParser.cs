@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Reflection.Metadata;
 
 namespace JitDumpAnalyser.Core;
 
@@ -42,6 +43,11 @@ public class DumpParser
                 MethodHash = methodHash,
             };
             ParsePhases(methodContent, methodCompilationResult.Phases);
+            foreach (var phase in methodCompilationResult.Phases)
+            {
+                ParseBasicBlocks(phase);
+            }
+
             result.ParsedMethods.Add(methodCompilationResult);
         }
 
@@ -127,5 +133,95 @@ public class DumpParser
             phases.Add(phaseInformation);
             lastPhase = phaseInformation;
         }
+    }
+
+    private void ParseBasicBlocks(PhaseInformation phase)
+    {
+        List<MethodBody> result = phase.MethodsDefinitions;
+        if (phase.PreInfo is not null)
+        {
+            result.AddRange(ParseBasicBlocks(phase.PreInfo));
+        }
+
+        result.AddRange(ParseBasicBlocks(phase.Content));
+        if (phase.PostInfo is not null)
+        {
+            result.AddRange(ParseBasicBlocks(phase.PostInfo));
+        }
+    }
+
+    public List<MethodBody> ParseBasicBlocks(string content)
+    {
+        List<MethodBody> result = new();
+        int offset = 0;
+        (MethodBody MethodBody, int offset)? parseResult;
+        do
+        {
+            parseResult = ParseMethodBody(content, offset);
+            if (parseResult.HasValue)
+            {
+                offset = parseResult.Value.offset;
+                result.Add(parseResult.Value.MethodBody);
+            }
+        }
+        while (parseResult.HasValue);
+        return result;
+    }
+
+    public (MethodBody MethodBody, int offset)? ParseMethodBody(string content, int offset)
+    {
+        MethodBody methodBody = new();
+        var tableLine = "-----------------------------------------------------------------------------------------------------------------------------------------";
+        offset = content.IndexOf(tableLine, offset);
+        if (offset == -1)
+        {
+            return null;
+        }
+
+        offset += tableLine.Length;
+        offset = content.IndexOf(tableLine, offset);
+        if (offset == -1)
+        {
+            return null;
+        }
+
+        offset += tableLine.Length;
+        var tableEnd = content.IndexOf(tableLine, offset);
+        if (tableEnd == -1)
+        {
+            return null;
+        }
+
+        var blockRows = content[offset..tableEnd];
+        var s = new StringReader(blockRows);
+        string? line = s.ReadLine();
+        while (line is not null)
+        {
+            line = s.ReadLine();
+            if (line is not null)
+            {
+                var basicBlock = ParseBasicBlock(line);
+                methodBody.BasicBlocks.Add(basicBlock);
+            }
+        }
+
+        return (methodBody, tableEnd + tableLine.Length);
+    }
+
+    public BasicBlock ParseBasicBlock(string content)
+    {
+        var bbNum = content[2..4];
+        var bbId = content[6..10];
+        var bbref = content[12..14];
+        var bbpred = content[23..25];
+        var ilOffsetStart = content[52..55];
+        var ilOffsetEnd = content[57..60];
+        var flags = content[98..];
+
+        var block = new BasicBlock()
+        {
+            SourceString = content,
+        };
+        return block;
     }
 }

@@ -18,4 +18,6 @@ public class PhaseInformation
     public string? PreInfo { get; internal set; }
     public string? PostInfo { get; internal set; }
     public bool NoChanges { get; init; }
+
+    public List<MethodBody> MethodsDefinitions { get; } = new();
 }

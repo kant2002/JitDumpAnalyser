@@ -5,6 +5,7 @@
     xmlns:viewModels="using:JitDumpAnalyser.ViewModels"
     xmlns:core="using:JitDumpAnalyser.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:sys="using:System"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
@@ -31,6 +32,11 @@
             </NavigationView.MenuItemTemplate>
             <ScrollViewer>
                 <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" Height="50">
+                        <TextBlock Text="Methods:"/>
+                        <TextBlock Text="{Binding Path=SelectedPhase.MethodsDefinitions.Count}"/>
+                        <TextBlock Text=" count"/>
+                    </StackPanel>
                     <TextBlock Text="Pre info" FontWeight="Bold" />
                     <TextBlock Text="{Binding Path=SelectedPhase.PreInfo}" FontFamily="Consolas">
                         <TextBlock.KeyboardAccelerators>
