@@ -10,7 +10,7 @@ public class MethodCompilationResult
 
     public string MethodName { get; }
 
-    public string Content { get; }
+    public string Content { get; internal set; }
 
     public uint MethodHash { get; set; }
 

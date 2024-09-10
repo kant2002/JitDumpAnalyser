@@ -1,7 +1,4 @@
-﻿using System;
-using System.Reflection.Metadata;
-
-namespace JitDumpAnalyser.Core;
+﻿namespace JitDumpAnalyser.Core;
 
 public class DumpParser
 {
@@ -18,7 +15,35 @@ public class DumpParser
             var startIndex = content.IndexOf(StartCompilingMarker, seekIndex);
             if (startIndex < 0)
             {
+                var lastItem = result.ParsedMethods[^1];
+                var leftOver = content[seekIndex..];
+                lastItem.Content += leftOver;
+                var lastPhase = lastItem.Phases[^1];
+                if (lastPhase.PostInfo is not null)
+                {
+                    lastPhase.PostInfo += leftOver;
+                }
+                else
+                {
+                    lastPhase.Content += leftOver;
+                }
                 return result;
+            }
+
+            if (startIndex != 0 && startIndex > seekIndex)
+            {
+                var lastItem = result.ParsedMethods[^1];
+                var leftOver = content[seekIndex..startIndex];
+                lastItem.Content += leftOver;
+                var lastPhase = lastItem.Phases[^1];
+                if (lastPhase.PostInfo is not null)
+                {
+                    lastPhase.PostInfo += leftOver;
+                }
+                else
+                {
+                    lastPhase.Content += leftOver;
+                }
             }
 
             var endIndex = content.IndexOf(EndCompilingMarker, startIndex + StartCompilingMarker.Length);
@@ -81,14 +106,7 @@ public class DumpParser
             {
                 if (lastPhase is not null)
                 {
-                    if (lastPhase.PostInfo is not null)
-                    {
-                        lastPhase.PostInfo += preInit;
-                    }
-                    else
-                    {
-                        lastPhase.Content += preInit[..2];
-                    }
+                    lastPhase.PostInfo += preInit;
                 }
 
                 preInit = null;
@@ -100,18 +118,14 @@ public class DumpParser
                     var treesBeforeIndex = preInit.IndexOf("Trees before");
                     if (treesBeforeIndex == -1)
                     {
-                        lastPhase.PostInfo = preInit[..(preInit.Length - 2)];
+                        lastPhase.PostInfo = preInit[..preInit.Length];
                         preInit = null;
                     }
                     else
                     {
-                        lastPhase.PostInfo = preInit[0..(treesBeforeIndex - 2)];
+                        lastPhase.PostInfo = preInit[0..treesBeforeIndex];
                         preInit = preInit[treesBeforeIndex..];
                     }
-                }
-                else if (lastPhase is not null)
-                {
-                    preInit = preInit[2..];
                 }
             }
 
