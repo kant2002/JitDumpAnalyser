@@ -105,9 +105,13 @@ public class DumpParser
                     }
                     else
                     {
-                        lastPhase.PostInfo = preInit[0..treesBeforeIndex];
+                        lastPhase.PostInfo = preInit[0..(treesBeforeIndex - 2)];
                         preInit = preInit[treesBeforeIndex..];
                     }
+                }
+                else if (lastPhase is not null)
+                {
+                    preInit = preInit[2..];
                 }
             }
 
