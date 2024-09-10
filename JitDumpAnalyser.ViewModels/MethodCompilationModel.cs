@@ -1,14 +1,18 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using JitDumpAnalyser.Core;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace JitDumpAnalyser.ViewModels;
 
-public partial class MethodCompilationModel : INotifyPropertyChanged
+public partial class MethodCompilationModel : ObservableObject
 {
     private readonly MethodCompilationResult method;
+    [ObservableProperty]
     private PhaseInformation? selectedPhase;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Phases))]
+    private bool showOnlyBasicBlocks;
 
     public MethodCompilationModel(MethodCompilationResult method)
     {
@@ -21,7 +25,7 @@ public partial class MethodCompilationModel : INotifyPropertyChanged
 
     public uint MethodHash => method.MethodHash;
 
-    public List<PhaseInformation> Phases => method.Phases;
+    public List<PhaseInformation> Phases => method.Phases.Where(_ => !ShowOnlyBasicBlocks || _.MethodsDefinitions.Count > 0).ToList();
 
     [RelayCommand]
     private void NextPhase()
@@ -49,22 +53,5 @@ public partial class MethodCompilationModel : INotifyPropertyChanged
             var index = Phases.IndexOf(SelectedPhase);
             SelectedPhase = Phases[(index - 1) % Phases.Count];
         }
-    }
-
-    public PhaseInformation? SelectedPhase
-    {
-        get => selectedPhase;
-        set
-        {
-            selectedPhase = value;
-            this.NotifyPropertyChanged();
-        }
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    private void NotifyPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

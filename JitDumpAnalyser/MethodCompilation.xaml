@@ -9,6 +9,9 @@
     xmlns:sys="using:System"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <local:NullableBooleanToBooleanConverter x:Key="NullableBooleanToBooleanConverter"/>
+    </UserControl.Resources>
 
     <Grid d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type=viewModels:MethodCompilationModel}">
         <Grid.RowDefinitions>
@@ -27,12 +30,13 @@
                 <TextBlock Text="{Binding MethodHash}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                <CheckBox IsChecked="{Binding ShowOnlyBasicBlocks, Mode=TwoWay, Converter={StaticResource NullableBooleanToBooleanConverter}}" IsThreeState="False">With BB only</CheckBox>
                 <Button Command="{Binding PrevPhaseCommand}">&lt;</Button>
                 <Button Command="{Binding NextPhaseCommand}">&gt;</Button>
             </StackPanel>
         </Grid>
         <!--<TextBlock Text="{x:Bind Content}" />-->
-        <NavigationView Grid.Row="1" MenuItemsSource="{Binding Phases}" PaneDisplayMode="Left"
+        <NavigationView Grid.Row="1" MenuItemsSource="{Binding Phases, Mode=OneWay}" PaneDisplayMode="Left"
                                             SelectedItem="{Binding SelectedPhase, Mode=TwoWay}"
                                             IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False"
                                             IsSettingsVisible="False" x:Name="view">
