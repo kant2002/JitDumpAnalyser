@@ -22,7 +22,7 @@
                             <ListView ItemsSource="{Binding BasicBlocks}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding}" FontFamily="Consolas"/>
+                                        <TextBlock Text="{Binding SourceString}" FontFamily="Consolas"/>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
